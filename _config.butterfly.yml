@@ -1,0 +1,40 @@
+# 头像设置
+avatar:
+  img: /img/avatar.jpg
+  effect: true
+
+# 社交图标
+social:
+  fab fa-github: https://github.com/Novicenew || Github
+
+# 首页文章显示
+index_post_content:
+  enable: true
+  length: 300
+
+# 文章页面配置
+post_meta:
+  page:
+    date_type: created
+    categories: true
+    tags: true
+
+# 侧边栏设置
+card_author:
+  enable: true
+  description: 纵使杯水车薪，我亦在所不惜
+
+# 背景设置
+background: url(/img/background.jpg)
+
+# 分类系列功能
+category_ui: 
+  enable: true
+
+# 导航菜单
+menu:
+  首页: / || fas fa-home
+  分类: /categories/ || fas fa-folder-open
+  标签: /tags/ || fas fa-tags
+  归档: /archives/ || fas fa-archive
+  关于: /about/ || fas fa-heart 
