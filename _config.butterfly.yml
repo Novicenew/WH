@@ -3,23 +3,32 @@ avatar:
   img: /img/avatar.jpg
   effect: false  # 关闭头像旋转
 
+# 网站标题和副标题设置
+subtitle:
+  enable: true
+  effect: false  # 关闭打字机特效
+  loop: false
+  source: false
+  sub:
+    - 纵有疾风起，人生不言弃
+
 # 网站标题
 site_title_font:
-  font_family: 'ZhuZiAWan, "Noto Serif SC", serif'
-  font_size: 2.5rem
-  font_weight: bold
+  font_family: 'Aa牡丹亭毛笔行书, "华文行楷", STXingkai, cursive'
+  font_size: 4rem
+  font_weight: normal
   color: "#ffffff"
   text_align: center
-  text_shadow: '2px 2px 4px #000000'
+  text_shadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
 
 # 网站副标题
 site_subtitle_font:
-  font_family: 'ZhuZiAWan, "Noto Serif SC", serif'
-  font_size: 1.5rem
-  font_weight: bold
+  font_family: 'Aa牡丹亭毛笔行书, "华文行楷", STXingkai, cursive'
+  font_size: 2.5rem
+  font_weight: normal
   color: "#ffffff"
   text_align: center
-  text_shadow: '2px 2px 4px #000000'
+  text_shadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
 
 # 背景设置
 # background: '/img/background.jpg'
@@ -69,4 +78,11 @@ menu:
   关于: /about/ || fas fa-heart
 
 # 首页封面大图
-index_img: /img/background.jpg 
+index_img: /img/background.jpg
+
+# 注入设置
+inject:
+  head:
+    - <link rel="stylesheet" href="/css/custom.css">
+  bottom:
+    - <script src="/js/cursor-effects.js"></script> 

@@ -1,32 +1,30 @@
-/* 标题悬停特效 */
+/* 标题和副标题毛笔字体及排布 */
+#site-title, #subtitle {
+  font-family: 'Aa牡丹亭毛笔行书', 'ZCOOL KuaiLe', '华文行楷', 'STXingkai', cursive !important;
+  text-align: center;
+  margin: 0 auto;
+  letter-spacing: 0.2em;
+}
+
 #site-title {
-  transition: all 0.3s;
-  position: relative;
-  z-index: 1;
+  font-size: 4rem !important;
+  color: #ffffff !important;
+  font-weight: normal !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3) !important;
+  margin-bottom: 2rem !important;
 }
 
-#site-title:hover {
-  transform: scale(1.1);
-  text-shadow: 0 0 10px rgba(255,255,255,0.8);
-}
-
-/* 副标题特效 */
-#site-subtitle {
-  animation: glow 2s ease-in-out infinite alternate;
-}
-
-@keyframes glow {
-  from {
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #e60073;
-  }
-  to {
-    text-shadow: 0 0 10px #fff, 0 0 20px #ff4da6, 0 0 30px #ff4da6;
-  }
+#subtitle {
+  font-size: 2.5rem !important;
+  color: #ffffff !important;
+  font-weight: normal !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* 背景图片设置 */
 #page-header {
   position: relative;
+  height: 100vh;
   background-attachment: fixed;
   background-position: center;
   background-size: cover;
@@ -40,20 +38,54 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.3);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.5));
   z-index: 0;
+}
+
+/* 标题和副标题容器 */
+#site-info {
+  position: relative;
+  z-index: 1;
+  padding: 20px;
+  text-align: center;
+  top: 40%;
+  transform: translateY(-50%);
 }
 
 /* 鼠标特效 */
 .cursor-effect {
   position: fixed;
-  width: 10px;
-  height: 10px;
+  pointer-events: none;
+  z-index: 99999;
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, border-color 0.3s;
+}
+
+.cursor-dot {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99999;
+  width: 6px;
+  height: 6px;
   background: #fff;
   border-radius: 50%;
-  pointer-events: none;
-  mix-blend-mode: screen;
-  z-index: 99999;
+  transform: translate(-50%, -50%);
+}
+
+/* 点击波纹效果 */
+@keyframes ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
 }
 
 /* 头像容器样式 */
