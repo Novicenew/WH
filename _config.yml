@@ -31,7 +31,7 @@ i18n_dir: :lang
 skip_render:
 
 # Writing
-new_post_name: :title.md # File name of new posts
+new_post_name: :category/:title.md # File name of new posts
 default_layout: post
 titlecase: false # Transform title into titlecase
 external_link:
@@ -41,9 +41,10 @@ external_link:
 filename_case: 0
 render_drafts: false
 post_asset_folder: true
-# marked:
-#   prependRoot: true
-#   postAsset: true
+marked:
+  prependRoot: true
+  postAsset: true
+  autolink: true
 relative_link: false
 future: true
 syntax_highlighter: highlight.js
@@ -107,9 +108,5 @@ deploy:
   type: ''
 
 # 图片资源插件配置
-# 需要安装 hexo-asset-image 插件: npm install hexo-asset-image --save
-
-asset_image:
-  enabled: true
-  upload_dir: 'uploads'  # 移除前导斜杠
-  base_url: '/uploads'
+# 使用CodeFalling的hexo-asset-image插件，确保已安装：npm install hexo-asset-image --save
+# 上面已有post_asset_folder和marked配置，不要重复

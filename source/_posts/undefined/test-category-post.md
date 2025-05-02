@@ -1,12 +1,12 @@
 ---
-title: {{ title }}
-date: {{ date }}
+title: test-category-post
 categories:
   - 技术笔记
 tags:
   - 笔记
-cover: false  # 如果要显示封面图，改为: /img/your-cover.jpg
-top_img: false  # 如果要显示顶部图，改为: /img/your-top.jpg
+cover: false
+top_img: false
+date: 2025-05-02 19:02:56
 ---
 
 ## 简介

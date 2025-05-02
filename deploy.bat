@@ -34,15 +34,23 @@ set /p tags=请输入文章标签（多个标签用空格分隔）:
 
 echo.
 echo 正在创建文章...
+:: 创建分类目录（如果不存在）
+if not exist "source/_posts/%category%" mkdir "source/_posts/%category%"
+
+:: 使用Hexo创建文章
 call npx hexo new "%title%"
 
-:: 创建文章的图片文件夹
-if not exist "source/_posts/%title%" mkdir "source/_posts/%title%"
+:: 移动文章到对应分类目录
+:: 注意：现在我们已经在_config.yml中配置了`:category/:title.md`，所以不再需要手动移动文件
+:: 但我们仍然需要确保文章的图片目录存在
+
+:: 创建文章的图片文件夹（在分类目录下）
+if not exist "source/_posts/%category%/%title%" mkdir "source/_posts/%category%/%title%"
 
 echo.
 echo ========= 文章创建成功！ =========
-echo 文章位置：source/_posts/%title%.md
-echo 图片目录：source/_posts/%title%/
+echo 文章位置：source/_posts/%category%/%title%.md
+echo 图片目录：source/_posts/%category%/%title%/
 echo.
 echo 提示：
 echo 1. 可以直接使用中文文件名
@@ -50,87 +58,32 @@ echo 2. 图片放在文章专属文件夹中
 echo 3. 在文章中引用图片：![描述](图片名.jpg)
 echo 4. 使用选项5可以快速导入剪贴板图片
 echo ================================
+pause
 goto menu
 
 :server
 echo.
+echo 启动本地预览服务器...
 echo 正在自动处理所有Markdown文件中的图片...
 
 :: 使用PowerShell处理所有Markdown文件中的图片引用
 powershell -Command ^"^
-Get-ChildItem 'source/_posts' -Filter *.md | ForEach-Object { ^
-    $mdFile = $_.FullName; ^
-    $folder = $_.BaseName; ^
-    $content = Get-Content -Path $mdFile -Raw; ^
-    $matches = [regex]::Matches($content, '!\[.*?\]\(((?!http|/img).*?)\)'); ^
-    foreach ($match in $matches) { ^
-        $imgPath = $match.Groups[1].Value; ^
-        $imgName = Split-Path $imgPath -Leaf; ^
-        $destFolder = Join-Path 'source\_posts' $folder; ^
-        if (!(Test-Path $destFolder)) { ^
-            Write-Host ('创建文章图片目录: ' + $destFolder); ^
-            New-Item -ItemType Directory -Path $destFolder -Force | Out-Null; ^
-        } ^
-        $srcFile = Join-Path (Split-Path $mdFile) $imgPath; ^
-        $destFile = Join-Path $destFolder $imgName; ^
-        if (Test-Path $srcFile) { ^
-            Write-Host ('处理图片: ' + $imgPath + ' -> ' + $destFile); ^
-            Copy-Item -Path $srcFile -Destination $destFile -Force; ^
-        } else { ^
-            Write-Host ('图片不存在: ' + $srcFile) -ForegroundColor Yellow; ^
-        } ^
-    } ^
-}^"
-
-echo.
-echo 正在启动本地预览...
-echo 如果端口 4004 被占用，将自动尝试其他端口
-call npx hexo clean
-call npx hexo generate
-call npx hexo server -p 4004 || call npx hexo server -p 4005 || call npx hexo server -p 4006
-goto menu
-
-:clean_generate
-echo.
-echo 清理并重新生成站点...
-call npx hexo clean
-call npx hexo generate
-echo 完成！
-goto menu
-
-:batch_process_images
-echo.
-echo ========= 批量图片处理 =========
-echo 1. 扫描并修复所有文章图片引用
-echo 2. 批量优化图片大小(压缩)
-echo 3. 批量重命名图片(移除中文和特殊字符)
-echo 4. 返回主菜单
-echo.
-set /p img_choice=请选择操作 (1-4): 
-
-if "%img_choice%"=="1" goto scan_fix_images
-if "%img_choice%"=="2" goto optimize_images
-if "%img_choice%"=="3" goto rename_images
-if "%img_choice%"=="4" goto menu
-goto batch_process_images
-
-:scan_fix_images
-echo.
-echo 正在扫描并修复所有文章的图片引用...
-
-:: 使用PowerShell扫描修复所有Markdown文件中的图片引用
-powershell -Command ^"^
 Get-ChildItem 'source/_posts' -Filter *.md -Recurse | ForEach-Object { ^
     $mdFile = $_.FullName; ^
     $folder = $_.BaseName; ^
-    $content = Get-Content -Path $mdFile -Raw; ^
+    $content = Get-Content -Path $mdFile -Raw -Encoding UTF8; ^
+    if ($null -eq $content) { ^
+        Write-Host ('无法读取文件: ' + $mdFile) -ForegroundColor Red; ^
+        return; ^
+    } ^
     $modified = $false; ^
     $matches = [regex]::Matches($content, '!\[(.*?)\]\(((?!http|/img).*?)\)'); ^
     foreach ($match in $matches) { ^
         $imgAlt = $match.Groups[1].Value; ^
         $imgPath = $match.Groups[2].Value; ^
         $imgName = Split-Path $imgPath -Leaf; ^
-        $destFolder = Join-Path 'source\_posts' $folder; ^
+        $categoryFolder = Split-Path (Split-Path $mdFile -Parent) -Leaf; ^
+        $destFolder = Join-Path (Join-Path 'source\_posts' $categoryFolder) $folder; ^
         if (!(Test-Path $destFolder)) { ^
             Write-Host ('创建文章图片目录: ' + $destFolder); ^
             New-Item -ItemType Directory -Path $destFolder -Force | Out-Null; ^
@@ -168,125 +121,76 @@ Get-ChildItem 'source/_posts' -Filter *.md -Recurse | ForEach-Object { ^
 }^"
 
 echo.
-echo 图片扫描和修复完成!
+echo 启动Hexo服务器，按Ctrl+C停止...
+call npx hexo server
+goto menu
+
+:clean_generate
+echo.
+echo 清理并重新生成站点...
+call npx hexo clean
+call npx hexo generate
+echo.
+echo 站点生成完成！
 pause
-goto batch_process_images
+goto menu
 
-:optimize_images
+:batch_process_images
 echo.
-echo 注意: 需要已安装ImageMagick才能优化图片
-echo 是否已安装ImageMagick? (Y/N)
-set /p have_imagemagick=
-
-if /i not "%have_imagemagick%"=="Y" (
-    echo.
-    echo 请先安装ImageMagick: https://imagemagick.org/script/download.php
-    echo 然后重新运行此选项
-    pause
-    goto batch_process_images
-)
-
-echo.
-echo 正在批量优化文章图片...
-powershell -Command ^"^
-Get-ChildItem 'source/_posts' -Directory | ForEach-Object { ^
-    $postDir = $_.FullName; ^
-    $images = Get-ChildItem $postDir -File -Include *.jpg,*.jpeg,*.png,*.gif; ^
-    foreach ($img in $images) { ^
-        Write-Host ('优化图片: ' + $img.FullName); ^
-        try { ^
-            magick $img.FullName -strip -interlace Plane -quality 85%% $img.FullName; ^
-            Write-Host ('已优化: ' + $img.Name) -ForegroundColor Green; ^
-        } catch { ^
-            Write-Host ('优化失败: ' + $img.Name + ' - ' + $_.Exception.Message) -ForegroundColor Red; ^
-        } ^
-    } ^
-}^"
-
-echo.
-echo 图片优化完成!
-pause
-goto batch_process_images
-
-:rename_images
-echo.
-echo 批量重命名图片（移除中文和特殊字符）...
-echo 1. 仅处理全局图片(source/img目录)
-echo 2. 处理所有文章图片
-echo 3. 返回上级菜单
-set /p rename_choice=请选择操作 (1-3): 
-
-if "%rename_choice%"=="1" (
-    echo 正在处理全局图片...
-    if not exist "source\img" mkdir "source\img"
-    powershell -Command ^"^
-    Get-ChildItem 'source/img' -File | ForEach-Object { ^
-        $oldName = $_.Name; ^
-        $newName = $oldName -replace '[^\x00-\x7F]+', '' -replace '[^a-zA-Z0-9.-]', '-'; ^
-        if ($oldName -ne $newName) { ^
-            Rename-Item $_.FullName -NewName $newName -Force; ^
-            Write-Host ('已重命名: ' + $oldName + ' -> ' + $newName) -ForegroundColor Green; ^
-        } ^
-    }^"
-) else if "%rename_choice%"=="2" (
-    echo 正在处理所有文章图片...
-    powershell -Command ^"^
-    Get-ChildItem 'source/_posts' -Directory | ForEach-Object { ^
-        $postDir = $_.FullName; ^
-        $postName = $_.Name; ^
-        $images = Get-ChildItem $postDir -File -Include *.jpg,*.jpeg,*.png,*.gif; ^
-        $mdFile = Get-ChildItem 'source/_posts' -Filter ($postName + '.md'); ^
-        $content = $null; ^
-        if ($mdFile) { $content = Get-Content -Path $mdFile.FullName -Raw; } ^
-        foreach ($img in $images) { ^
-            $oldName = $img.Name; ^
-            $newName = $oldName -replace '[^\x00-\x7F]+', '' -replace '[^a-zA-Z0-9.-]', '-'; ^
-            if ($oldName -ne $newName) { ^
-                $newPath = Join-Path $postDir $newName; ^
-                Rename-Item $img.FullName -NewName $newName -Force; ^
-                Write-Host ('已重命名: ' + $oldName + ' -> ' + $newName) -ForegroundColor Green; ^
-                if ($content -and $content.Contains('![$oldName]')) { ^
-                    $content = $content -replace [regex]::Escape('![')([^]]+)('\](\('+$oldName+'\))'), ('![$1]($newName)'); ^
-                    Set-Content -Path $mdFile.FullName -Value $content -Encoding UTF8; ^
-                    Write-Host ('已更新文章中的引用: ' + $oldName + ' -> ' + $newName) -ForegroundColor Cyan; ^
-                } ^
-            } ^
-        } ^
-    }^"
-) else if "%rename_choice%"=="3" (
-    goto batch_process_images
-)
-
-echo.
-echo 图片重命名完成!
-pause
-goto batch_process_images
+echo 批量处理文章图片...
+call hexo-image-uploader.bat
+goto menu
 
 :import_clipboard
 echo.
-set /p post_title=请输入要添加图片的文章标题（不包含.md）: 
-if not exist "source/_posts/%post_title%" (
+set /p title=请输入文章标题（不包含.md）: 
+set /p category=请输入文章所在分类: 
+if "%category%"=="" set category=技术笔记
+
+:: 检查文章目录结构
+set article_path=source/_posts/%category%/%title%.md
+set article_dir=source/_posts/%category%/%title%
+
+if not exist "%article_path%" (
+    echo 错误：文章 %title%.md 不存在于分类 %category% 中！
+    echo 请确认文章标题和分类是否正确
+    pause
+    goto menu
+)
+
+if not exist "%article_dir%" (
     echo 创建文章图片目录...
-    mkdir "source/_posts/%post_title%"
+    mkdir "%article_dir%"
 )
 
 set timestamp=%date:~0,4%%date:~5,2%%date:~8,2%%time:~0,2%%time:~3,2%%time:~6,2%
 set timestamp=%timestamp: =0%
-set img_path=source/_posts/%post_title%/image_%timestamp%.png
+set img_path=%article_dir%/image_%timestamp%.png
 
 echo 正在从剪贴板导入图片...
 powershell -Command ^"^
 Add-Type -AssemblyName System.Windows.Forms; ^
-$img = [Windows.Forms.Clipboard]::GetImage(); ^
-if ($img) { ^
-    $img.Save('%img_path%', [System.Drawing.Imaging.ImageFormat]::Png); ^
-    echo '图片已保存：%img_path%'; ^
-    echo '-----------------------------------'; ^
-    echo '在Markdown中使用:'; ^
-    echo '![描述](image_%timestamp%.png)'; ^
-    echo '-----------------------------------'; ^
-} else { ^
-    echo '剪贴板中没有图片！' -ForegroundColor Red; ^
+try { ^
+    $img = [Windows.Forms.Clipboard]::GetImage(); ^
+    if ($img) { ^
+        $img.Save('%img_path%', [System.Drawing.Imaging.ImageFormat]::Png); ^
+        echo '图片已保存：%img_path%'; ^
+        echo '-----------------------------------'; ^
+        echo '在Markdown中使用:'; ^
+        echo '![描述](image_%timestamp%.png)'; ^
+        echo '-----------------------------------'; ^
+        echo '提示：'; ^
+        echo '1. 将上面的代码复制到您的Markdown文章中'; ^
+        echo '2. 将"描述"替换为您想要的图片描述'; ^
+    } else { ^
+        echo '剪贴板中没有图片！请先复制图片' -ForegroundColor Red; ^
+    } ^
+} catch { ^
+    echo ('导入图片失败: ' + $_.Exception.Message) -ForegroundColor Red; ^
+    echo '可能原因：'; ^
+    echo '1. 剪贴板中没有有效图片'; ^
+    echo '2. 没有足够的权限写入文件'; ^
+    echo '3. 文件路径包含不支持的字符'; ^
 }^"
 
 echo.
@@ -295,33 +199,12 @@ goto menu
 
 :deploy
 echo.
-echo ========= 部署选项 =========
-echo 1. 部署到GitHub Pages
-echo 2. 使用自定义部署命令
-echo 3. 返回主菜单
+echo 部署到网站...
+call npx hexo deploy
 echo.
-set /p deploy_choice=请选择操作 (1-3): 
-
-if "%deploy_choice%"=="1" (
-    echo 正在部署到GitHub Pages...
-    call npx hexo clean
-    call npx hexo generate
-    call npx hexo deploy
-    echo 完成！
-    pause
-    goto menu
-) else if "%deploy_choice%"=="2" (
-    echo.
-    echo 请输入自定义部署命令:
-    set /p custom_cmd=
-    call %custom_cmd%
-    echo 完成！
-    pause
-    goto menu
-) else if "%deploy_choice%"=="3" (
-    goto menu
-)
-goto deploy
+echo 部署完成！
+pause
+goto menu
 
 :end
 echo.
