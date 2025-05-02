@@ -6,7 +6,7 @@
 
 ### 1. 图片上传与引用机制
 
-Hexo默认使用**文章资源文件夹**机制管理图片，您的项目已启用此功能（`post_asset_folder: true`）。
+Hexo默认使用**文章资源文件夹**机制管理图片，您的项目已启用此功能（`post_asset_folder: true`）。并且已安装**hexo-asset-image**插件增强图片管理功能。
 
 #### 工作原理
 
@@ -16,8 +16,16 @@ Hexo默认使用**文章资源文件夹**机制管理图片，您的项目已启
 
 #### 正确的图片引用方式
 
+使用hexo-asset-image插件后，推荐以下方式引用图片：
+
 ```markdown
 ![图片描述](图片名.jpg)
+```
+
+或者使用标签插件方式：
+
+```markdown
+{% asset_img 图片名.jpg 图片描述 %}
 ```
 
 而不是：
@@ -32,11 +40,19 @@ Hexo默认使用**文章资源文件夹**机制管理图片，您的项目已启
 **解决方案**:
 - 使用专用的Markdown编辑器(如Typora)，并设置正确的图片根目录
 - 使用`hexo server`命令启动本地预览服务器
+- 确保已安装`hexo-asset-image`插件
 - 使用提供的`hexo-image-uploader.bat`脚本处理图片
 
 #### 问题2: 图片引用路径错误
 
 **解决方案**:
+- 确保_config.yml中已配置：
+  ```yml
+  post_asset_folder: true
+  marked:
+    prependRoot: true
+    postAsset: true
+  ```
 - 使用提供的脚本自动修复引用路径
 - 确保图片名称不包含中文和特殊字符
 - 检查图片是否放在了正确的文件夹中
@@ -64,7 +80,7 @@ Hexo默认使用**文章资源文件夹**机制管理图片，您的项目已启
 
 **方法2: 手动管理图片**
 1. 将图片文件复制到文章同名文件夹中
-2. 在文章中使用`![描述](图片名.jpg)`格式引用图片
+2. 在文章中使用`![描述](图片名.jpg)`或`{% asset_img 图片名.jpg 图片描述 %}`格式引用图片
 3. 使用脚本的"扫描并修复"功能确保引用正确
 
 #### 发布前图片检查
@@ -93,6 +109,16 @@ Hexo默认使用**文章资源文件夹**机制管理图片，您的项目已启
 1. 图片文件是否实际存在于相应目录
 2. 图片引用语法是否正确
 3. 图片路径是否包含特殊字符
-4. Hexo配置文件中的`post_asset_folder`设置是否为`true`
+4. Hexo配置文件中的配置是否正确：
+   ```yml
+   post_asset_folder: true
+   marked:
+     prependRoot: true
+     postAsset: true
+   ```
+5. 是否正确安装了hexo-asset-image插件：
+   ```bash
+   npm install hexo-asset-image --save
+   ```
 
 使用提供的`hexo-image-uploader.bat`脚本可以解决大多数图片问题。 

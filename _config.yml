@@ -41,6 +41,9 @@ external_link:
 filename_case: 0
 render_drafts: false
 post_asset_folder: true
+# marked:
+#   prependRoot: true
+#   postAsset: true
 relative_link: false
 future: true
 syntax_highlighter: highlight.js
@@ -102,3 +105,11 @@ theme: butterfly
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: ''
+
+# 图片资源插件配置
+# 需要安装 hexo-asset-image 插件: npm install hexo-asset-image --save
+
+asset_image:
+  enabled: true
+  upload_dir: 'uploads'  # 移除前导斜杠
+  base_url: '/uploads'
