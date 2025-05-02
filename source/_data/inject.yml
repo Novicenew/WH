@@ -1,5 +1,5 @@
 head:
   - <link rel="stylesheet" href="/css/custom.css">
-
+ 
 bottom:
   - <script src="/js/cursor-effects.js"></script> 

@@ -90,12 +90,1205 @@
 
 /* 头像容器样式 */
 .avatar-img {
-  border: 2px solid #fff;
-  box-shadow: 0 0 20px rgba(255,255,255,0.5);
-  transition: all 0.3s;
+  border: 3px solid rgba(52, 152, 219, 0.7);
+  box-shadow: 0 0 20px rgba(52, 152, 219, 0.4);
+  transition: none;
 }
 
 .avatar-img:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 25px rgba(255,255,255,0.8);
-} 
+  transform: none;
+  box-shadow: 0 0 20px rgba(52, 152, 219, 0.4);
+}
+
+/* ============== 分类卡片与文章卡片美化 ============== */
+
+/* 页面布局全局调整 */
+#content-inner {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  margin: 2rem auto;
+  max-width: 1200px;
+}
+
+/* 分类页面标题样式 */
+.category-name {
+  text-align: center;
+  font-size: 3rem;
+  color: #ffffff;
+  font-family: 'Aa牡丹亭毛笔行书', 'ZCOOL KuaiLe', '华文行楷', 'STXingkai', cursive;
+  margin: 1.5rem 0;
+  padding-bottom: 1.5rem;
+  position: relative;
+  text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.category-name:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #3498db, transparent);
+  border-radius: 2px;
+}
+
+/* 分类计数器样式 */
+.category-count {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem;
+  font-style: italic;
+}
+
+/* 分类卡片容器 */
+.category-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+  margin: 0 auto;
+  perspective: 1000px;
+}
+
+/* 分类卡片样式 */
+.category-card {
+  position: relative;
+  background: rgba(30, 34, 42, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 1px solid rgba(87, 110, 170, 0.2);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  transform-style: preserve-3d;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.category-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #3498db, #9b59b6);
+  z-index: 2;
+  opacity: 0.7;
+  border-radius: 16px 16px 0 0;
+  transition: all 0.3s ease;
+}
+
+.category-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 70%);
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-8px) rotateX(5deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  background: rgba(35, 40, 50, 0.9);
+  border-color: rgba(87, 110, 170, 0.5);
+}
+
+.category-card:hover::after {
+  opacity: 1;
+}
+
+.category-card:hover::before {
+  opacity: 0.9;
+  height: 8px;
+}
+
+/* 分类图标 */
+.category-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 2;
+  color: #3498db;
+  text-shadow: 0 0 15px rgba(52, 152, 219, 0.7);
+}
+
+/* 分类标题 */
+.category-card-title {
+  font-family: 'Aa牡丹亭毛笔行书', 'ZCOOL KuaiLe', '华文行楷', 'STXingkai', cursive;
+  font-size: 2.2rem;
+  color: #ffffff;
+  margin: 1rem 0;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+}
+
+.category-card:hover .category-card-title {
+  transform: translateY(-3px);
+  text-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+}
+
+/* 分类描述 */
+.category-description {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-top: 1rem;
+  position: relative;
+  z-index: 2;
+  font-weight: 300;
+}
+
+/* 分类卡片动画 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.category-card {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* 文章卡片样式 */
+.article-card {
+  background: rgba(30, 34, 42, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 1px solid rgba(87, 110, 170, 0.2);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  position: relative;
+}
+
+.article-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3498db, #9b59b6);
+  opacity: 0.7;
+}
+
+.article-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  background: rgba(35, 40, 50, 0.9);
+  border-color: rgba(87, 110, 170, 0.5);
+}
+
+.article-card .article-title {
+  font-size: 1.6rem;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  position: relative;
+  padding-bottom: 0.8rem;
+}
+
+.article-card .article-title:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, #3498db, transparent);
+  border-radius: 2px;
+}
+
+.article-card .article-meta {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.article-card .article-meta i {
+  color: #3498db;
+}
+
+.article-card .article-excerpt {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+.article-card .article-more {
+  display: inline-block;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #3498db, #9b59b6);
+  transition: all 0.3s ease;
+  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+}
+
+.article-card .article-more:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 7px 20px rgba(52, 152, 219, 0.6);
+}
+
+/* 分类页面文章列表样式 */
+.category-div {
+  padding: 2rem 1rem;
+}
+
+.article-sort {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 移除时间轴相关� �� */
+.article-sort:before,
+.article-sort-item:before,
+.article-sort-item:after {
+  display: none !important;
+}
+
+/* ?????? */
+.article-sort-item.year {
+  display: none !important;
+}
+
+/* 年份标题样式 */
+.article-sort-item.year {
+  grid-column: 1 / -1;
+  background: rgba(35, 42, 53, 0.9);
+  text-align: center;
+  padding: 1.2rem;
+  margin-bottom: 1rem !important;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.article-sort-item.year:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3498db, #9b59b6);
+  opacity: 0.7;
+}
+
+.article-sort-item.year h1 {
+  font-size: 2rem;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  font-family: 'Aa牡丹亭毛笔行书', 'ZCOOL KuaiLe', '华文行楷', 'STXingkai', cursive;
+}
+
+/* 文章卡片样式 */
+.article-sort-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: rgba(30, 34, 42, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 0 !important;
+  border: 1px solid rgba(87, 110, 170, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  height: 100%;
+  overflow: hidden;
+  border-bottom: none;
+}
+
+.article-sort-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3498db, #9b59b6);
+  opacity: 0.7;
+}
+
+.article-sort-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  background: rgba(35, 40, 50, 0.9);
+  border-color: rgba(87, 110, 170, 0.4);
+}
+
+/* 文章标题样式 */
+.article-sort-item-title {
+  color: #ffffff;
+  font-size: 1.4rem;
+  margin: 0.5rem 0 1rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+  flex-grow: 1;
+  position: relative;
+  padding-bottom: 0.7rem;
+}
+
+.article-sort-item-title:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #3498db, transparent);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.article-sort-item:hover .article-sort-item-title:after {
+  width: 60px;
+}
+
+.article-sort-item-title:hover {
+  color: #3498db;
+  text-decoration: none !important;
+}
+
+/* 文章时间样式 */
+.article-sort-item-time {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.article-sort-item-time:before {
+  content: '\f017';
+  font-family: 'Font Awesome 5 Free';
+  color: #3498db;
+}
+
+/* 文章元信息样式 */
+.article-sort-item-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.article-sort-item-categories,
+.article-sort-item-tags {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+}
+
+.article-sort-item-categories a,
+.article-sort-item-tags a {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(52, 152, 219, 0.2);
+  padding: 0.3rem 0.7rem;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.article-sort-item-categories a:before {
+  content: '\f07b';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
+
+.article-sort-item-tags a:before {
+  content: '\f02b';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
+
+.article-sort-item-categories a:hover,
+.article-sort-item-tags a:hover {
+  background: rgba(52, 152, 219, 0.4);
+  color: #ffffff;
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+
+/* 首页磨砂玻璃背景 */
+.recent-posts {
+  background: rgba(22, 28, 36, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* ============== 分类详情页面美化 ============== */
+
+/* 分类详情页面主容器 */
+.category-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* 分类标题美化 */
+.category-page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+  padding-bottom: 2rem;
+}
+
+.category-page-header:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #3498db, transparent);
+  border-radius: 2px;
+}
+
+.category-page-header h1 {
+  font-family: 'Aa牡丹亭毛笔行书', 'ZCOOL KuaiLe', '华文行楷', 'STXingkai', cursive;
+  font-size: 3rem;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.category-page-header .category-count {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
+}
+
+/* 博客文章卡片容器 */
+.category-post-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+/* 博客文章卡片 */
+.category-post {
+  position: relative;
+  background: rgba(30, 34, 42, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 1px solid rgba(87, 110, 170, 0.2);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.category-post::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3498db, #9b59b6);
+  opacity: 0.7;
+}
+
+.category-post:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  background: rgba(35, 40, 50, 0.9);
+  border-color: rgba(87, 110, 170, 0.4);
+}
+
+/* 文章标题 */
+.category-post-title {
+  font-size: 1.4rem;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-bottom: 0.8rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.category-post-title:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #3498db, transparent);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.category-post:hover .category-post-title:after {
+  width: 60px;
+}
+
+.category-post-title a {
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.category-post-title a:hover {
+  color: #3498db;
+}
+
+/* 文章日期时间 */
+.category-post-date {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.category-post-date:before {
+  content: '\f017';
+  font-family: 'Font Awesome 5 Free';
+  color: #3498db;
+}
+
+/* 文章摘要 */
+.category-post-excerpt {
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  flex-grow: 1;
+  font-weight: 300;
+}
+
+/* 文章标签 */
+.category-post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.category-post-tags a {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(52, 152, 219, 0.2);
+  padding: 0.3rem 0.7rem;
+  border-radius: 30px;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.category-post-tags a:before {
+  content: '\f02b';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
+
+.category-post-tags a:hover {
+  background: rgba(52, 152, 219, 0.4);
+  transform: translateY(-2px);
+}
+
+/* 阅读更多按钮 */
+.category-post-more {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #3498db, #9b59b6);
+  transition: all 0.3s ease;
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+}
+
+.category-post-more:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 7px 20px rgba(52, 152, 219, 0.6);
+}
+
+/* 针对Butterfly主题的分类页面覆盖样式 */
+#aside-content .card-info {
+  background: rgba(30, 34, 42, 0.8) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(87, 110, 170, 0.2) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+.layout {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-radius: 20px !important;
+  padding: 2rem !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 时间轴完全移除，改为卡片布局 */
+.article-sort {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 移除时间轴所有相关� �� */
+.article-sort:before,
+.article-sort-item:before,
+.article-sort-item:after {
+  display: none !important;
+}
+
+.article-sort-title {
+  position: relative;
+  margin-left: 0 !important;
+  padding-bottom: 1.5rem;
+  text-align: center;
+  font-family: 'Aa牡丹亭毛笔行书', 'ZCOOL KuaiLe', '华文行楷', 'STXingkai', cursive;
+  font-size: 2.5rem;
+  color: #ffffff;
+  margin-bottom: 2rem;
+  grid-column: 1 / -1;
+}
+
+.article-sort-title:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #3498db, transparent);
+  border-radius: 2px;
+}
+
+/* 分类详情页面底部分页 */
+.pagination {
+  text-align: center;
+  margin: 3rem 0 2rem;
+  grid-column: 1 / -1;
+}
+
+.pagination .page-number,
+.pagination .extend {
+  display: inline-block;
+  min-width: 40px;
+  height: 40px;
+  line-height: 40px;
+  margin: 0 5px;
+  text-align: center;
+  background: rgba(30, 34, 42, 0.8);
+  color: #ffffff;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.pagination .page-number.current {
+  background: linear-gradient(135deg, #3498db, #9b59b6);
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+}
+
+.pagination .page-number:hover,
+.pagination .extend:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* ?????????????????? */
+.article-sort-item,
+#recent-posts > .recent-post-item,
+.relatedPosts > .relatedPosts-list > div {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-radius: 16px !important;
+  padding: 1.5rem !important;
+  border: 1px solid rgba(87, 110, 170, 0.2) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  position: relative;
+  overflow: hidden !important;
+}
+
+.article-sort-item::before,
+#recent-posts > .recent-post-item::before,
+.relatedPosts > .relatedPosts-list > div::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3498db, #9b59b6);
+  opacity: 0.7;
+}
+
+.article-sort-item:hover,
+#recent-posts > .recent-post-item:hover,
+.relatedPosts > .relatedPosts-list > div:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  border-color: rgba(87, 110, 170, 0.4) !important;
+}
+
+/* ?????????? */
+.article-sort-item-title,
+#recent-posts > .recent-post-item .post-title,
+.relatedPosts > .relatedPosts-list > div .post-title {
+  font-family: 'Aa???????', 'ZCOOL KuaiLe', '????', 'STXingkai', cursive !important;
+  font-size: 1.5rem !important;
+  color: #333333 !important;
+  text-shadow: none !important;
+  transition: all 0.3s ease;
+}
+
+.article-sort-item-title:hover,
+#recent-posts > .recent-post-item .post-title:hover,
+.relatedPosts > .relatedPosts-list > div .post-title:hover {
+  color: #3498db !important;
+}
+
+/* ???????? */
+.article-sort-item-time,
+#recent-posts > .recent-post-item .post-meta-date,
+.relatedPosts > .relatedPosts-list > div .post-meta-date {
+  color: rgba(0, 0, 0, 0.7) !important;
+}
+
+.article-sort-item-text,
+#recent-posts > .recent-post-item .post-content-text,
+.relatedPosts > .relatedPosts-list > div .content {
+  color: rgba(0, 0, 0, 0.85) !important;
+  font-weight: 300 !important;
+}
+
+/* ??????? */
+.article-sort-item-categories,
+.article-sort-item-tags,
+#recent-posts > .recent-post-item .article-meta .post-meta-categories,
+#recent-posts > .recent-post-item .article-meta .post-meta-tags,
+.relatedPosts > .relatedPosts-list > div .article-meta {
+  color: rgba(0, 0, 0, 0.7) !important;
+}
+
+.article-sort-item-categories a,
+.article-sort-item-tags a,
+#recent-posts > .recent-post-item .article-meta a,
+.relatedPosts > .relatedPosts-list > div .article-meta a {
+  color: rgba(0, 0, 0, 0.8) !important;
+  background: rgba(52, 152, 219, 0.1) !important;
+  padding: 0.3rem 0.7rem !important;
+  border-radius: 30px !important;
+  transition: all 0.3s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.3rem !important;
+  font-size: 0.85rem !important;
+  margin: 0.2rem !important;
+}
+
+.article-sort-item-categories a:hover,
+.article-sort-item-tags a:hover,
+#recent-posts > .recent-post-item .article-meta a:hover,
+.relatedPosts > .relatedPosts-list > div .article-meta a:hover {
+  background: rgba(52, 152, 219, 0.3) !important;
+  color: #3498db !important;
+  text-decoration: none !important;
+  transform: translateY(-2px) !important;
+}
+
+/* ??????? */
+.layout > div > article {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-radius: 16px !important;
+  padding: 2rem !important;
+  border: 1px solid rgba(87, 110, 170, 0.2) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ????????? */
+#article-container {
+  color: rgba(0, 0, 0, 0.85) !important;
+}
+
+/* ???? */
+#post-info .post-title {
+  font-family: 'Aa???????', 'ZCOOL KuaiLe', '????', 'STXingkai', cursive !important;
+  color: #333333 !important;
+  text-shadow: none !important;
+}
+
+/* ????? */
+#post-info .post-meta,
+#post-info .post-meta a {
+  color: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* ???? */
+#aside-content #card-toc {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+#card-toc .toc-content {
+  color: rgba(0, 0, 0, 0.85) !important;
+}
+
+#card-toc .toc-link {
+  color: rgba(0, 0, 0, 0.7) !important;
+}
+
+#card-toc .toc-link.active {
+  color: #3498db !important;
+}
+
+/* �޸�������ʾ���� */
+.article-sort-title {
+  color: #333333 !important;
+  text-shadow: 0 0 10px rgba(52, 152, 219, 0.3) !important;
+  font-weight: bold !important;
+  font-size: 2.5rem !important;
+  position: relative;
+  z-index: 2;
+}
+
+/* ����������� */
+.article-sort:before {
+  display: none !important;
+}
+
+.article-sort-item:before {
+  display: none !important;
+}
+
+/* �޸�ʱ�俨Ƭ��ʽ */
+.article-sort-item-time {
+  display: inline-flex !important;
+  align-items: center !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: rgba(0, 0, 0, 0.7) !important;
+  font-size: 0.95rem !important;
+  padding: 0 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* ��������ͼ�� */
+.article-sort-item-time:before {
+  content: "\f017";
+  font-family: "Font Awesome 5 Free";
+  margin-right: 5px;
+  color: #3498db;
+}
+
+/* �������࿨Ƭ */
+.category-card {
+  position: relative;
+  background: rgba(30, 34, 42, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 2.5rem;
+  text-align: center;
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 1px solid rgba(87, 110, 170, 0.2);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  transform-style: preserve-3d;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.category-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #3498db, #9b59b6);
+  z-index: 2;
+  opacity: 0.7;
+  border-radius: 16px 16px 0 0;
+  transition: all 0.3s ease;
+}
+
+/* ??????????? */
+#aside-content .card-info .author-info__name,
+#aside-content .card-info .author-info__description {
+  font-family: 'Aa???????', 'ZCOOL KuaiLe', '????', 'STXingkai', cursive !important;
+  color: #ffffff !important;
+}
+
+#aside-content .card-info .author-info__name {
+  font-size: 1.8rem !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4) !important;
+  margin-bottom: 0.5rem !important;
+}
+
+#aside-content .item-headline,
+#aside-content .card-category-list-name,
+#aside-content .card-archive-list-name,
+#aside-content .card-tag-list-name {
+  font-family: 'Aa???????', 'ZCOOL KuaiLe', '????', 'STXingkai', cursive !important;
+  font-size: 1.5rem !important;
+  color: #ffffff !important;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ???????? */
+#aside-content .card-archives,
+#aside-content .card-categories,
+#aside-content .card-tags,
+#aside-content .card-webinfo,
+#aside-content .card-widget {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-radius: 16px !important;
+  padding: 1.5rem !important;
+  border: 1px solid rgba(87, 110, 170, 0.2) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  position: relative;
+  overflow: hidden !important;
+  margin-bottom: 1.5rem !important;
+}
+
+#aside-content .card-archives::before,
+#aside-content .card-categories::before,
+#aside-content .card-tags::before,
+#aside-content .card-webinfo::before, 
+#aside-content .card-widget::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 4px !important;
+  background: linear-gradient(90deg, #3498db, #9b59b6) !important;
+  opacity: 0.7 !important;
+  border-radius: 16px 16px 0 0 !important;
+  transition: all 0.3s ease !important;
+}
+
+#aside-content .card-archives:hover,
+#aside-content .card-categories:hover,
+#aside-content .card-tags:hover,
+#aside-content .card-webinfo:hover,
+#aside-content .card-widget:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15) !important;
+}
+
+#aside-content .card-archives:hover::before,
+#aside-content .card-categories:hover::before,
+#aside-content .card-tags:hover::before,
+#aside-content .card-webinfo:hover::before,
+#aside-content .card-widget:hover::before {
+  opacity: 0.9 !important;
+  height: 6px !important;
+}
+
+/* ?????????? */
+#aside-content a {
+  color: rgba(0, 0, 0, 0.8) !important;
+  transition: all 0.3s ease !important;
+}
+
+#aside-content a:hover {
+  color: #3498db !important;
+  text-decoration: none !important;
+  transform: translateX(3px) !important;
+  display: inline-block;
+}
+
+/* ???????? */
+#aside-content .card-tag-cloud a {
+  background: rgba(52, 152, 219, 0.1) !important;
+  border-radius: 10px !important;
+  padding: 0.3rem 0.7rem !important;
+  margin: 0.2rem !important;
+  display: inline-block !important;
+  transition: all 0.3s ease !important;
+  color: rgba(0, 0, 0, 0.8) !important;
+}
+
+#aside-content .card-tag-cloud a:hover {
+  background: rgba(52, 152, 219, 0.3) !important;
+  transform: translateY(-2px) translateX(0) !important;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1) !important;
+  color: #3498db !important;
+}
+
+/* ???????? */
+#nav.show {
+  background: rgba(30, 34, 42, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+#nav a {
+  font-family: 'Aa???????', 'ZCOOL KuaiLe', '????', 'STXingkai', cursive !important;
+  font-size: 1.3rem !important;
+  color: #ffffff !important;
+}
+
+#nav #site-name {
+  font-family: 'Aa???????', 'ZCOOL KuaiLe', '????', 'STXingkai', cursive !important;
+  font-size: 1.8rem !important;
+  color: #ffffff !important;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* ??????????????? */
+.card-info-data .length-num {
+  font-family: 'Aa???????', 'ZCOOL KuaiLe', '????', 'STXingkai', cursive !important;
+  font-size: 1.1rem !important;
+  color: #333333 !important;
+}
+
+.card-info-data .headline {
+  font-family: 'Aa???????', 'ZCOOL KuaiLe', '????', 'STXingkai', cursive !important;
+  font-size: 1.2rem !important;
+  color: #333333 !important;
+  text-shadow: none !important;
+}
+
+/* ???????? */
+#aside-content .card-webinfo .webinfo {
+  padding: 0.2rem 1rem !important;
+}
+
+#aside-content .card-webinfo .webinfo-item {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0.3rem 0 !important;
+}
+
+#aside-content .card-webinfo .webinfo-item-title {
+  font-family: 'Aa???????', 'ZCOOL KuaiLe', '????', 'STXingkai', cursive !important;
+  font-size: 1.1rem !important;
+  display: inline-block !important;
+  flex: 1 !important;
+  color: #333333 !important;
+  text-shadow: none !important;
+}
+
+#aside-content .card-webinfo .webinfo-item-text {
+  font-family: 'Aa???????', 'ZCOOL KuaiLe', '????', 'STXingkai', cursive !important;
+  color: #333333 !important;
+  font-size: 1.1rem !important;
+  text-shadow: none !important;
+}
+
+/* ??????? */
+#aside-content .item-headline,
+#aside-content .card-category-list-name,
+#aside-content .card-archive-list-name,
+#aside-content .card-tag-list-name {
+  font-family: 'Aa???????', 'ZCOOL KuaiLe', '????', 'STXingkai', cursive !important;
+  font-size: 1.5rem !important;
+  color: #333333 !important;
+  text-shadow: none !important;
+}
+
+/* ?????? */
+#mobile-sidebar-menus {
+  background: rgba(30, 34, 42, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+#mobile-sidebar-menus .name,
+#mobile-sidebar-menus .headline,
+#mobile-sidebar-menus .menus_item a {
+  font-family: 'Aa???????', 'ZCOOL KuaiLe', '????', 'STXingkai', cursive !important;
+  color: #ffffff !important;
+}
+
+#mobile-sidebar-menus .name {
+  font-size: 1.8rem !important;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4) !important;
+}
+
+#mobile-sidebar-menus .menus_item_child {
+  background: rgba(35, 40, 50, 0.9) !important;
+}

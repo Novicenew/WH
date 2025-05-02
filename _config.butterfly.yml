@@ -50,8 +50,7 @@ social:
 
 # 首页文章显示
 index_post_content:
-  enable: true
-  length: 300
+  enable: false
 
 # 文章页面配置
 post_meta:
@@ -68,10 +67,12 @@ card_author:
 # 分类系列功能
 category_ui: 
   enable: true
+  layout: block
+  sort: true
+  description: true
 
 # 导航菜单
 menu:
-  首页: / || fas fa-home
   分类: /categories/ || fas fa-folder-open
   标签: /tags/ || fas fa-tags
   归档: /archives/ || fas fa-archive
@@ -80,9 +81,27 @@ menu:
 # 首页封面大图
 index_img: /img/background.jpg
 
-# 注入设置
+# 首页分类卡片设置
+categoryBar:
+  enable: true
+  style: card
+  color: true
+  sort: true
+  animation: true
+  description: true
+
+# 分类页面设置
+category_page:
+  enable: true
+  layout: category
+  subtitle: 
+  order_by: name
+  top_img: /img/category-bg.jpg
+
+# 注入自定义样式
 inject:
   head:
     - <link rel="stylesheet" href="/css/custom.css">
   bottom:
-    - <script src="/js/cursor-effects.js"></script> 
+    - <script src="/js/cursor-effects.js"></script>
+    - <script src="/js/category-cards.js"></script> 
